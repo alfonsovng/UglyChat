@@ -11,6 +11,9 @@ import play.api.Play.current
 
 object ChatController extends Controller {
 
+  /**
+   * Main route. Redirects to the login page
+   */
   def index = Action {
     Redirect(routes.ChatController.prepareLogin)
   }
@@ -22,10 +25,16 @@ object ChatController extends Controller {
     )(User.apply)(User.unapply)
   )
 
+  /**
+   * Login page
+   */
   def prepareLogin = Action {
     Ok(views.html.login(LoginForm))
   }
 
+  /**
+   * If login is ok, redirects to the chat page
+   */
   def login = Action { implicit request =>
     LoginForm.bindFromRequest.fold(
       errors => BadRequest(views.html.login(errors)),
@@ -33,12 +42,18 @@ object ChatController extends Controller {
     )
   }
 
+  /**
+   * Chat page
+   */
   def chat(user:User) = Action {
     Ok(views.html.chat(user))
   }
 
+  /**
+   * Websocket entry point using actors
+   */
   def websocket(user:User) = WebSocket.acceptWithActor[String, String] {
     request => out =>
-      ChatActor.props(out)
+      ChatActor.props(user, out)
   }
 }
