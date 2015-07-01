@@ -8,7 +8,7 @@
           <h2>Hello @user.name!</h2>
         </div>
         <div class="small-12 large-4 columns text-right">
-          <a class="button alert prefix" href="@routes.ChatController.index()">Logout</a>
+          <a class="button alert prefix" id="logout" href="@routes.ChatController.index()">Logout</a>
         </div>
       </div>
       <div class="row">
@@ -55,6 +55,10 @@
             if(e.which == 13) {
               $('#send').click();
             }
+          });
+
+          $('#logout').click(function (e) {
+            doLogout();
           });
         } );
     </script>

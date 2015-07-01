@@ -1,4 +1,6 @@
-//http://www.websocket.org/echo.html
+/*
+Adapted from http://www.websocket.org/echo.html
+*/
 var websocket;
 
 function initWebsocket(websocketPath)
@@ -36,10 +38,12 @@ function doSend(message)
     websocket.send(message);
 }
 
+function doLogout() {
+    websocket.close();
+}
+
 function writeToScreen(message)
 {
     $('#output').animate({scrollTop:$('#output').height()},'50');
     $('#output').append( "<br />" + message );
 }
-
-
