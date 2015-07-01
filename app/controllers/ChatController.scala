@@ -37,7 +37,7 @@ object ChatController extends Controller {
     Ok(views.html.chat(user))
   }
 
-  def websocket = WebSocket.acceptWithActor[String, String] {
+  def websocket(user:User) = WebSocket.acceptWithActor[String, String] {
     request => out =>
       ChatActor.props(out)
   }
