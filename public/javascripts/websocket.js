@@ -35,7 +35,9 @@ function onError(evt)
 
 function doSend(message)
 {
-    websocket.send(message);
+    var json = new Object();
+    json.message = message;
+    websocket.send(JSON.stringify(json));
 }
 
 function doLogout() {
@@ -44,6 +46,9 @@ function doLogout() {
 
 function writeToScreen(message)
 {
+    var json = jQuery.parseJSON(message);
     $('#output').animate({scrollTop:$('#output').height()},'50');
-    $('#output').append( "<br />" + message );
+    $('#output').append( "<br /><span style='background-color: " + json.color
+        + "'>&nbsp;<span style='color: " + json.color + "; filter: invert(100%)'>" + json.user + "</span>&nbsp;</span> "
+        + json.message );
 }

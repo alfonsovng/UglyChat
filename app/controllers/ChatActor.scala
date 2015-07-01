@@ -2,6 +2,7 @@ package controllers
 
 import akka.actor.{ActorSystem, Actor, ActorRef, Props}
 import models.{User,Message}
+import play.api.libs.json._
 import scala.collection.mutable
 
 /**
@@ -28,7 +29,10 @@ class ChatActor(user:User, client: ActorRef, clientListActor:ActorRef) extends A
    * using the ClientListActor
    */
   def receive = {
-    case s: String => clientListActor ! MessageAll(Message(user,s))
+    case json: JsValue => {
+      val message = (json \ "message").as[String]
+      clientListActor ! MessageAll(Message(user, message))
+    }
   }
 }
 
@@ -77,6 +81,13 @@ class ClientListActor extends Actor {
   def receive = {
     case AddClient(c) => clients.enqueue(c)
     case RemoveClient(c) => clients.dequeueFirst(_ == c)
-    case MessageAll(m) => clients.foreach(c => c ! m.text)
+    case MessageAll(m) => {
+      val json = Json.obj(
+        "message" -> m.text,
+        "user" -> m.user.name,
+        "color" -> m.user.color
+      )
+      clients.foreach(c => c ! json)
+    }
   }
 }

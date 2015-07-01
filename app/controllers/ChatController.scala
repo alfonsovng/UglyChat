@@ -1,6 +1,7 @@
 package controllers
 
 import models.User
+import play.api.libs.json.JsValue
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
@@ -52,7 +53,7 @@ object ChatController extends Controller {
   /**
    * Websocket entry point using actors
    */
-  def websocket(user:User) = WebSocket.acceptWithActor[String, String] {
+  def websocket(user:User) = WebSocket.acceptWithActor[JsValue, JsValue] {
     request => out =>
       ChatActor.props(user, out)
   }
