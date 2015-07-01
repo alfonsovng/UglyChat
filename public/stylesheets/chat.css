@@ -5,13 +5,10 @@
 	margin-top: 5%;
 	max-width: 500px;
 }
-h1 {
-	background-color: white;
-	text-align: center;
-}
 
 div#output {
+	border: dotted thin #222222;
 	overflow: auto;
 	height: 300px;
-	background-color: white;
+	margin-bottom: 10px;
 }

@@ -1,6 +1,6 @@
 @(loginForm: Form[User])
 
-@template("UglyChat!") {
+@template {
     @helper.form(action = routes.ChatController.login(), 'id -> "main-form") {
         <div class="row collapse">
             <div class="small-5 large-4 columns">
