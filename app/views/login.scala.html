@@ -1,0 +1,53 @@
+@(loginForm: Form[User])
+<!DOCTYPE html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" >
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>UglyChat</title>
+        <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("normalize.css"))' />
+        <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("foundation.css"))' />
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/chat.css")' />
+        <script src='@routes.WebJarAssets.at(WebJarAssets.locate("modernizr.js"))'></script>
+    </head>
+    <body>
+        <div class="center row">
+            <div class="large-12 columns">
+                <div class="row">
+                    <div class="large-12 columns text-center">
+                        <h1>UglyChat!</h1>
+                    </div>
+                </div>
+                @helper.form(action = routes.ChatController.login(), 'id -> "main-form") {
+                    <div class="row collapse">
+                        <div class="small-5 large-4 columns">
+                            <span class="prefix">User name</span>
+                        </div>
+                        <div class="small-7 large-8 columns">
+                            <input type="text" name="name" placeholder="Whatever" required="true" />
+                        </div>
+                    </div>
+                    <div class="row collapse">
+                        <div class="small-5 large-4 columns">
+                            <span class="prefix">Color</span>
+                        </div>
+                        <div class="small-7 large-8 columns">
+                            <input type="color" name="color" required="true" />
+                        </div>
+                    </div>
+                    <div class="row collapse">
+                        <div class="small-8 large-6 columns large-offset-3 small-offset-2">
+                            <button class="button expand success large" type="submit">Let's chat!</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <script src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.js"))'></script>
+        <script src='@routes.WebJarAssets.at(WebJarAssets.locate("foundation.min.js"))'></script>
+        <script>
+        $(document).foundation();
+    </script>
+    </body>
+</html>

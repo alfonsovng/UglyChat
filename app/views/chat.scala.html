@@ -1,0 +1,64 @@
+@(user: User)
+<!DOCTYPE html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UglyChat</title>
+    <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("normalize.css"))' />
+    <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("foundation.css"))' />
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/chat.css")' />
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("modernizr.js"))'></script>
+  </head>
+  <body style="background-color: @user.color">
+    <div class="center row">
+      <div class="large-12 columns">
+        <div class="row">
+          <div class="large-12 columns text-center">
+            <h1>Hello @user.name!</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            <div id="output"></div>
+          </div>
+        </div>
+        <div class="row collapse">
+          <div class="large-10 columns">
+            <input type="text" id="message" placeholder="Write something..."/>
+          </div>
+          <div class="large-2 columns">
+            <button id="send" class="button postfix">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.js"))'></script>
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("foundation.min.js"))'></script>
+    <script src='@routes.Assets.at("javascripts/websocket.js")'></script>
+    <script>
+        $(document).foundation();
+
+        $(window).load ( function ( ) {
+          initWebsocket('@routes.ChatController.websocket()');
+
+          $('#send').click(function (e) {
+            var m =  $('#message').val();
+            if(m) {
+              doSend(m);
+              $('#message').val("");
+            }
+          });
+
+          $('#message').keypress(function(e) {
+            if(e.which == 13) {
+              $('#send').click();
+            }
+          });
+        } );
+    </script>
+  </body>
+</html>
+
+
