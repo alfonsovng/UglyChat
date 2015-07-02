@@ -7,4 +7,6 @@ This projecte is a demo project to test the possibilities of websockets with pla
 
 Take a look to the code (it's documentated) and feel free to use it or to ask me some questions.
 
+You can see this applications running (or maybe not) at [scala.shotbingo.com](http://scala.shotbingo.com/) 
+
 Bye!
