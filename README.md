@@ -5,6 +5,6 @@ This is a demo project to test the possibilities of websockets with play framewo
 
 Take a look to the code (it's documented) and feel free to use or modify it.
 
-You can see this application running (or maybe not) at [scala.shotbingo.com](http://scala.shotbingo.com/) 
+You can see this application running (or maybe not) at [scala.shotbingo.com](http://scala.shotbingo.com:9000/) 
 
 If you want to ask me any question just tweet to [@alfonsovng](https://twitter.com/alfonsovng)
