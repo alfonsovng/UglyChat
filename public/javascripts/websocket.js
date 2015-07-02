@@ -15,22 +15,28 @@ function initWebsocket(websocketPath)
 
 function onOpen(evt)
 {
-    writeToScreen("CONNECTED");
+    writeToScreen("<p class='text-right'><span class='label success'>CONNECTED</span></p>");
 }
 
 function onClose(evt)
 {
-    writeToScreen("DISCONNECTED");
+    writeToScreen("<p class='text-right'><span class='label warning'>DISCONNECTED</span></p>");
 }
 
 function onMessage(evt)
 {
-    writeToScreen(evt.data);
+    var json = jQuery.parseJSON(evt.data);
+
+    var html = "<span style='background-color: " + json.color
+        + "'>&nbsp;<span style='color: " + json.color + "; filter: invert(100%)'>"
+        + json.user + "</span>&nbsp;</span> " + json.message + "<br />";
+
+    writeToScreen(html);
 }
 
 function onError(evt)
 {
-    writeToScreen("ERROR: " + evt.data);
+    writeToScreen("<p class='text-right'><span class='label alert'>ERROR: " + evt.data  + "</span></p>");
 }
 
 function doSend(message)
@@ -44,11 +50,8 @@ function doLogout() {
     websocket.close();
 }
 
-function writeToScreen(message)
+function writeToScreen(html)
 {
-    var json = jQuery.parseJSON(message);
     $('#output').animate({scrollTop:$('#output').height()},'50');
-    $('#output').append( "<br /><span style='background-color: " + json.color
-        + "'>&nbsp;<span style='color: " + json.color + "; filter: invert(100%)'>" + json.user + "</span>&nbsp;</span> "
-        + json.message );
+    $('#output').append(html);
 }

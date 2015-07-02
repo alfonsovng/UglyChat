@@ -7,7 +7,7 @@
                 <span class="prefix">User name</span>
             </div>
             <div class="small-7 large-8 columns">
-                <input type="text" name="name" placeholder="Whatever" required="true" />
+                <input type="text" id="name" name="name" placeholder="Whatever" required="true" />
             </div>
         </div>
         <div class="row collapse">
@@ -15,7 +15,7 @@
                 <span class="prefix">Color</span>
             </div>
             <div class="small-7 large-8 columns">
-                <input type="color" name="color" required="true" />
+                <input type="color" id="color" name="color" required="true" />
             </div>
         </div>
         <div class="row collapse">
@@ -25,5 +25,14 @@
         </div>
     }
 } {
-    <!-- NO EXTRA JS REQUIRED -->
+    <script>
+        $(window).load ( function ( ) {
+            //sets a default random color
+            //http://stackoverflow.com/questions/1484506/random-color-generator-in-javascript
+            $('#color').val('#'+(Math.random()*0xFFFFFF<<0).toString(16));
+
+            //sets the focus on the name
+            $('#name').focus();
+        } );
+    </script>
 }
