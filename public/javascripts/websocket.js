@@ -15,28 +15,38 @@ function initWebsocket(websocketPath)
 
 function onOpen(evt)
 {
-    writeToScreen("<p class='text-right'><span class='label success'>YOU ARE CONNECTED</span></p>");
+    writeToScreen("<div class='text-right'><span class='label success'>YOU ARE CONNECTED</span></div>");
 }
 
 function onClose(evt)
 {
-    writeToScreen("<p class='text-right'><span class='label warning'>YOU ARE DISCONNECTED</span></p>");
+    writeToScreen("<div class='text-right'><span class='label warning'>YOU ARE DISCONNECTED</span></div>");
 }
 
 function onMessage(evt)
 {
     var json = jQuery.parseJSON(evt.data);
 
-    var html = "<span style='background-color: " + json.color
-        + "'>&nbsp;<span style='color: " + json.color + "; filter: invert(100%)'>"
-        + json.user + "</span>&nbsp;</span> " + json.message + "<br />";
+    var type = json.type;
 
+    var html;
+    if(type == "message") {
+        html = "<span style='background-color: " + json.color
+            + "'>&nbsp;<span style='color: " + json.color + "; filter: invert(100%)'>"
+            + json.user + "</span>&nbsp;</span> " + json.message + "<br />";
+    } else if(type == "login") {
+        html = "<div class='text-right'><span class='label info'>" + json.user  + " IS CONNECTED</span></div>"
+    } else if(type == "logout") {
+        html = "<div class='text-right'><span class='label secondary'>" + json.user  + " IS DISCONNECTED</span></div>"
+    } else {
+        html = "<div class='text-right'><span class='label alert'>ERROR: " + evt.data  + "</span></div>"
+    }
     writeToScreen(html);
 }
 
 function onError(evt)
 {
-    writeToScreen("<p class='text-right'><span class='label alert'>ERROR: " + evt.data  + "</span></p>");
+    writeToScreen("<div class='text-right'><span class='label alert'>ERROR: " + evt.data  + "</span></div>");
 }
 
 function doSend(message)

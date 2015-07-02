@@ -14,14 +14,14 @@ class ChatActor(user:User, client: ActorRef, clientListActor:ActorRef) extends A
    * Adds the client to the client list
    */
   override def preStart() = {
-    clientListActor ! AddClient(client)
+    clientListActor ! AddClient(user, client)
   }
 
   /**
    * Removes the client from the client list
    */
   override def postStop() = {
-    clientListActor ! RemoveClient(client)
+    clientListActor ! RemoveClient(user, client)
   }
 
   /**
@@ -58,9 +58,9 @@ object ChatActor {
  */
 sealed trait ClientListActorMsg{}
 
-case class AddClient(val client:ActorRef) extends ClientListActorMsg
+case class AddClient(val user:User, val client:ActorRef) extends ClientListActorMsg
 
-case class RemoveClient(val client:ActorRef) extends ClientListActorMsg
+case class RemoveClient(val user:User, val client:ActorRef) extends ClientListActorMsg
 
 case class MessageAll(val message:Message) extends ClientListActorMsg
 
@@ -73,21 +73,49 @@ class ClientListActor extends Actor {
   /**
    * List (well, queue) of clients
    */
-  private val clients = mutable.Queue[ActorRef]()
+  private val clients = mutable.Queue[(User,ActorRef)]()
 
   /**
    * Adds a client, removes a client or sends a message to all the clients.
    */
   def receive = {
-    case AddClient(c) => clients.enqueue(c)
-    case RemoveClient(c) => clients.dequeueFirst(_ == c)
+
+    case AddClient(user, newClient) => {
+      val newLogin = Json.obj(
+        "type" -> "login",
+        "user" -> user.name
+      )
+      clients.foreach( client => {
+        client._2 ! newLogin
+
+        val currentLogin = Json.obj(
+          "type" -> "login",
+          "user" -> client._1.name
+        )
+        newClient ! currentLogin
+      })
+
+      clients.enqueue((user,newClient))
+    }
+
+    case RemoveClient(u, c) => {
+      clients.dequeueFirst(_ == (u,c))
+
+      val logout = Json.obj(
+        "type" -> "logout",
+        "user" -> u.name
+      )
+      clients.foreach( client => client._2 ! logout);
+    }
+
     case MessageAll(m) => {
       val json = Json.obj(
+        "type" -> "message",
         "message" -> m.text,
         "user" -> m.user.name,
         "color" -> m.user.color
       )
-      clients.foreach(c => c ! json)
+      clients.foreach(client => client._2 ! json)
     }
   }
 }
