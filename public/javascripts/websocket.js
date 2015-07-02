@@ -49,10 +49,17 @@ function onError(evt)
     writeToScreen("<div class='text-right'><span class='label alert'>ERROR: " + evt.data  + "</span></div>");
 }
 
+//http://stackoverflow.com/a/9251169
+var escape = document.createElement('textarea');
+function escapeHTML(html) {
+    escape.textContent = html;
+    return escape.innerHTML;
+}
+
 function doSend(message)
 {
     var json = new Object();
-    json.message = message;
+    json.message = escapeHTML(message);
     websocket.send(JSON.stringify(json));
 }
 

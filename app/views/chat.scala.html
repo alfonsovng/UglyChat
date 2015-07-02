@@ -52,7 +52,7 @@
           $('#send').click(function (e) {
             var m =  $('#message').val();
             if(m) {
-              doSend(escape(m));
+              doSend(m);
               $('#message').val("");
             }
             $('#message').focus();
