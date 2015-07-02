@@ -81,6 +81,9 @@ class ClientListActor extends Actor {
   def receive = {
 
     case AddClient(user, newClient) => {
+
+      System.out.println("Added client " + user.name)
+
       val newLogin = Json.obj(
         "type" -> "login",
         "user" -> user.name
@@ -99,6 +102,9 @@ class ClientListActor extends Actor {
     }
 
     case RemoveClient(u, c) => {
+
+      System.out.println("Removed client " + u.name)
+
       clients.dequeueFirst(_ == (u,c))
 
       val logout = Json.obj(
