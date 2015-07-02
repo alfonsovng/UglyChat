@@ -15,12 +15,12 @@ function initWebsocket(websocketPath)
 
 function onOpen(evt)
 {
-    writeToScreen("<p class='text-right'><span class='label success'>CONNECTED</span></p>");
+    writeToScreen("<p class='text-right'><span class='label success'>YOU ARE CONNECTED</span></p>");
 }
 
 function onClose(evt)
 {
-    writeToScreen("<p class='text-right'><span class='label warning'>DISCONNECTED</span></p>");
+    writeToScreen("<p class='text-right'><span class='label warning'>YOU ARE DISCONNECTED</span></p>");
 }
 
 function onMessage(evt)
