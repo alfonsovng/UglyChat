@@ -53,6 +53,11 @@ object ChatActor {
 }
 
 /**
+ * Represents a client, with a name and an actor where send messages
+ */
+case class Client(val userName:String, val actor: ActorRef);
+
+/**
  * Represents the different type of messages that the ClientListActor
  * can receibe.
  */
@@ -73,15 +78,14 @@ class ClientListActor extends Actor {
   /**
    * List (well, queue) of clients
    */
-  private val clients = mutable.Queue[(User,ActorRef)]()
+  private val clients = mutable.Queue[Client]()
 
   /**
    * Adds a client, removes a client or sends a message to all the clients.
    */
   def receive = {
 
-    case AddClient(user, newClient) => {
-
+    case AddClient(user, actor) => {
       System.out.println("Added client " + user.name)
 
       val newLogin = Json.obj(
@@ -89,39 +93,47 @@ class ClientListActor extends Actor {
         "user" -> user.name
       )
       clients.foreach( client => {
-        client._2 ! newLogin
+        //sends the new login message to the rest of clients
+        client.actor ! newLogin
 
+        //notifies to the new client all the current clients connected
         val currentLogin = Json.obj(
           "type" -> "login",
-          "user" -> client._1.name
+          "user" -> client.userName
         )
-        newClient ! currentLogin
+        actor ! currentLogin
       })
 
-      clients.enqueue((user,newClient))
+      clients.enqueue(Client(user.name, actor))
     }
 
-    case RemoveClient(u, c) => {
+    case RemoveClient(user, actor) => {
+      val clientToRemove = Client(user.name, actor)
 
-      System.out.println("Removed client " + u.name)
+      if(clients.dequeueFirst(_ == clientToRemove).isDefined) {
+        System.out.println("Removed client " + user.name)
 
-      clients.dequeueFirst(_ == (u,c))
-
-      val logout = Json.obj(
-        "type" -> "logout",
-        "user" -> u.name
-      )
-      clients.foreach( client => client._2 ! logout);
+        //sends the logout message to the rest of clients
+        val logout = Json.obj(
+          "type" -> "logout",
+          "user" -> user.name
+        )
+        clients.foreach(client => client.actor ! logout);
+      } else {
+        System.out.println("Trying to remove client " + user.name + " but it doesn't exist!")
+      }
     }
 
     case MessageAll(m) => {
+      System.out.println("Message from " + m.user.name + ": " + m.text)
+
       val json = Json.obj(
         "type" -> "message",
         "message" -> m.text,
         "user" -> m.user.name,
         "color" -> m.user.color
       )
-      clients.foreach(client => client._2 ! json)
+      clients.foreach(client => client.actor ! json)
     }
   }
 }
