@@ -31,9 +31,9 @@ function onMessage(evt)
 
     var html;
     if(type == "message") {
-        html = "<span style='background-color: " + json.color
-            + "'>&nbsp;<span style='color: " + json.color + "; filter: invert(100%)'>"
-            + json.user + "</span>&nbsp;</span> " + json.message + "<br />";
+        html = "<div><span style='background-color: " + json.color
+            + "'>&nbsp;<span style='color: " + json.color + "; filter: invert(100%); -webkit-filter: invert(100%);'>"
+            + json.user + "</span>&nbsp;</span> " + json.message + "</div>";
     } else if(type == "login") {
         html = "<div class='text-right'><span class='label info'>" + json.user  + " IS CONNECTED</span></div>"
     } else if(type == "logout") {
