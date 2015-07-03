@@ -69,6 +69,7 @@ function doLogout() {
 
 function writeToScreen(html)
 {
-    $('#output').animate({scrollTop:$('#output').height()},'50');
     $('#output').append(html);
+    //http://stackoverflow.com/a/15366681
+    $('#output').scrollTop($('#output')[0].scrollHeight);
 }
